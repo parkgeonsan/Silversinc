@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SilverSync - 로그인/온보딩</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #E8F1FB 0%, #F3E8FB 100%);
+    }
+    .back-link {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: var(--card);
+      padding: 8px 16px;
+      border-radius: 20px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: var(--shadow);
+    }
+    .label { position: fixed; top: 20px; right: 20px; background: #8E44AD; color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+
+    /* 온보딩 전용 스타일 */
+    .onboard-content {
+      height: calc(100% - 100px);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .onboard-content::-webkit-scrollbar { display: none; }
+
+    .onboard-screen {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      padding: 0 24px;
+    }
+    .onboard-screen.active {
+      display: flex;
+    }
+
+    /* 스플래시 */
+    .splash-screen {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(135deg, var(--primary), #3A7BC8);
+      margin: 0;
+      padding: 0 24px;
+    }
+    .splash-logo {
+      width: 100px;
+      height: 100px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      margin: 0 auto 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    .splash-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 8px;
+    }
+    .splash-subtitle {
+      font-size: 15px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.6;
+    }
+    .splash-tagline {
+      margin-top: 40px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* 로그인 폼 */
+    .login-header {
+      text-align: center;
+      padding-top: 40px;
+      margin-bottom: 32px;
+    }
+    .login-header h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .login-header p {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .input-group {
+      margin-bottom: 16px;
+    }
+    .input-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+      background: var(--card);
+    }
+    .input-field:focus {
+      border-color: var(--primary);
+    }
+    .input-field::placeholder {
+      color: var(--text-light);
+    }
+    .input-row {
+      display: flex;
+      gap: 8px;
+    }
+    .input-row .input-field {
+      flex: 1;
+    }
+    .input-row .btn {
+      white-space: nowrap;
+      padding: 14px 16px;
+    }
+    .sms-timer {
+      font-size: 12px;
+      color: var(--primary);
+      text-align: right;
+      margin-top: 6px;
+    }
+
+    /* 역할 선택 */
+    .role-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .role-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .role-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .role-card.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .role-card-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+    .role-card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .role-card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* 코드 입력 */
+    .code-input-wrap {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin: 24px 0;
+    }
+    .code-box {
+      width: 48px;
+      height: 56px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .code-box:focus {
+      border-color: var(--primary);
+    }
+    .code-box.filled {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    /* 어르신 연결 확인 */
+    .connect-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      margin: 16px 0;
+    }
+    .connect-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 12px;
+    }
+
+    /* 권한 요청 */
+    .permission-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      background: var(--card);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+    .permission-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+    .permission-info {
+      flex: 1;
+    }
+    .permission-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .permission-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+    .permission-toggle {
+      width: 48px;
+      height: 28px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      background: var(--border);
+      position: relative;
+      transition: background 0.3s;
+    }
+    .permission-toggle.on {
+      background: var(--secondary);
+    }
+    .permission-toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: white;
+      transition: transform 0.3s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .permission-toggle.on::after {
+      transform: translateX(20px);
+    }
+
+    /* 하단 네비게이션 */
+    .onboard-footer {
+      padding: 16px 24px 36px;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+    }
+    .step-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all 0.3s;
+    }
+    .step-dot.active {
+      width: 24px;
+      border-radius: 4px;
+      background: var(--primary);
+    }
+    .step-dot.completed {
+      background: var(--secondary);
+    }
+    .onboard-nav {
+      display: flex;
+      gap: 8px;
+    }
+    .onboard-nav .btn {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-link">← 목록으로</a>
+  <div class="label">🔐 로그인/온보딩</div>
+
+  <div class="phone-frame">
+    <!-- 상태바 -->
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">📶 🔋</span>
+    </div>
+
+    <!-- 온보딩 콘텐츠 -->
+    <div class="onboard-content">
+      <!-- 화면 1: 스플래시 -->
+      <div id="step-1" class="onboard-screen splash-screen active">
+        <div class="splash-logo">🤝</div>
+        <div class="splash-title">SilverSync</div>
+        <div class="splash-subtitle">
+          노인장기요양 시설과 보호자를<br>
+          하나로 연결하는 정보 동기화 솔루션
+        </div>
+        <div class="splash-tagline">우리 부모님의 하루, 실시간으로 함께합니다</div>
+      </div>
+
+      <!-- 화면 2: 로그인 -->
+      <div id="step-2" class="onboard-screen">
+        <div class="login-header">
+          <h2>본인 인증</h2>
+          <p>휴대폰 번호로 간편하게 시작하세요</p>
+        </div>
+
+        <div class="input-group">
+          <label>휴대폰 번호</label>
+          <div class="input-row">
+            <input type="tel" class="input-field" placeholder="010-0000-0000" value="010-1234-5678">
+            <button class="btn btn-primary btn-sm">인증 요청</button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>인증번호</label>
+          <div class="input-row">
+            <input type="number" class="input-field" placeholder="6자리 입력" value="382957">
+            <button class="btn btn-outline btn-sm">확인</button>
+          </div>
+          <div class="sms-timer">남은 시간: 2:48</div>
+        </div>
+
+        <div class="card" style="background: var(--secondary-light); border: 1px solid rgba(108,192,112,0.3); margin-top: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 18px;">✅</span>
+            <div>
+              <div style="font-size: 13px; font-weight: 600; color: var(--secondary);">인증 완료</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">본인 인증이 완료되었습니다</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: auto; padding: 24px 0;">
+          <div style="font-size: 11px; color: var(--text-light); text-align: center; line-height: 1.5;">
+            계속 진행하면 <span style="color: var(--primary); cursor: pointer;">이용약관</span> 및
+            <span style="color: var(--primary); cursor: pointer;">개인정보 처리방침</span>에 동의하는 것으로 간주합니다.
+          </div>
+        </div>
+      </div>
+
+      <!-- 화면 3: 역할 선택 -->
+      <div id="step-3" class="onboard-screen">
+        <div class="login-header">
+          <h2>어떻게 사용하시나요?</h2>
+          <p>본인의 역할을 선택해주세요</p>
+        </div>
+
+        <div class="role-cards">
+          <div class="role-card" onclick="selectRole(this, 'facility')">
+            <div class="role-card-icon">🏥</div>
+            <div class="role-card-title">시설 직원</div>
+            <div class="role-card-desc">
+              장기요양 시설에서 근무하며<br>어르신을 돌보고 있어요
+            </div>
+          </div>
+          <div class="role-card selected" onclick="selectRole(this, 'guardian')">
+            <div class="role-card-icon">👨‍👩‍👧‍👦</div>
+            <div class="role-card-title">보호자</div>
+            <div class="role-card-desc">
+              시설에 계신 부모님/가족의<br>일상을 확인하고 싶어요
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 화면 4: 시설 직원 - 시설 코드 입력 -->
+      <div id="step-4" class="onboard-screen">
+        <div class="login-header">
+          <h2>🏥 시설 등록</h2>
+          <p>관리자에게 받은 시설 코드를 입력해주세요</p>
+        </div>
+
+        <div class="code-input-wrap">
+          <input type="text" class="code-box filled" value="A" maxlength="1">
+          <input type="text" class="code-box filled" value="J" maxlength="1">
+          <input type="text" class="code-box filled" value="C" maxlength="1">
+          <input type="text" class="code-box filled" value="0" maxlength="1">
+          <input type="text" class="code-box filled" value="0" maxlength="1">
+          <input type="text" class="code-box" value="" maxlength="1" placeholder="·">
+        </div>
+
+        <div class="card" style="text-align: center; margin-top: 8px;">
+          <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 4px;">시설 코드는 관리자 또는 센터장에게 문의하세요</div>
+          <div style="font-size: 12px; color: var(--text-light);">예시: AJC001</div>
+        </div>
+
+        <div class="connect-card" style="margin-top: 16px;">
+          <div style="font-size: 40px; margin-bottom: 8px;">🏥</div>
+          <div style="font-size: 18px; font-weight: 700; margin-bottom: 4px;">조은아침 주간보호센터</div>
+          <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">울산광역시 북구 호계로 123</div>
+          <div style="display: flex; justify-content: center; gap: 8px;">
+            <span class="badge badge-primary">주간보호</span>
+            <span class="badge badge-success">운영중</span>
+          </div>
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
+            <div style="font-size: 12px; color: var(--text-secondary);">시설장: 최상아 · 정원 30명</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 화면 5: 보호자 - 초대 코드 입력 + 어르신 연결 확인 -->
+      <div id="step-5" class="onboard-screen">
+        <div class="login-header">
+          <h2>👨‍👩‍👧‍👦 어르신 연결</h2>
+          <p>시설에서 받은 초대 코드를 입력해주세요</p>
+        </div>
+
+        <div class="code-input-wrap">
+          <input type="text" class="code-box filled" value="G" maxlength="1">
+          <input type="text" class="code-box filled" value="K" maxlength="1">
+          <input type="text" class="code-box filled" value="Y" maxlength="1">
+          <input type="text" class="code-box filled" value="S" maxlength="1">
+          <input type="text" class="code-box filled" value="8" maxlength="1">
+          <input type="text" class="code-box filled" value="5" maxlength="1">
+        </div>
+
+        <div class="connect-card">
+          <div style="font-size: 12px; color: var(--secondary); font-weight: 600; margin-bottom: 12px;">✅ 어르신 정보를 확인해주세요</div>
+          <div class="connect-avatar">👵</div>
+          <div style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">김영숙</div>
+          <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">1941년생 (85세) · 여성</div>
+          <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 16px;">
+            <span class="badge badge-primary">장기요양 3등급</span>
+            <span class="badge badge-success">조은아침 주간보호센터</span>
+          </div>
+          <div style="padding: 12px; background: var(--bg); border-radius: var(--radius-sm); text-align: left; font-size: 13px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+              <span style="color: var(--text-secondary);">관계</span>
+              <span style="font-weight: 600;">딸</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-secondary);">보호자명</span>
+              <span style="font-weight: 600;">김지영</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="background: var(--warning-light); border: 1px solid rgba(245,166,35,0.3);">
+          <div style="display: flex; align-items: flex-start; gap: 8px;">
+            <span style="font-size: 16px;">⚠️</span>
+            <div style="font-size: 12px; color: var(--text); line-height: 1.5;">
+              이 어르신이 맞으시면 '확인' 버튼을 눌러주세요. 잘못된 정보인 경우 시설에 문의해주세요.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 화면 6: 알림 권한 요청 -->
+      <div id="step-6" class="onboard-screen">
+        <div class="login-header">
+          <h2>앱 권한 설정</h2>
+          <p>원활한 서비스 이용을 위해<br>아래 권한을 허용해주세요</p>
+        </div>
+
+        <div class="permission-item">
+          <div class="permission-icon" style="background: var(--danger-light);">🔔</div>
+          <div class="permission-info">
+            <div class="permission-title">알림 권한</div>
+            <div class="permission-desc">복약 알림, 송영 도착 알림, 일과 보고 알림을 받으실 수 있습니다</div>
+          </div>
+          <button class="permission-toggle on" onclick="togglePermission(this)"></button>
+        </div>
+
+        <div class="permission-item">
+          <div class="permission-icon" style="background: var(--primary-light);">📍</div>
+          <div class="permission-info">
+            <div class="permission-title">위치 권한</div>
+            <div class="permission-desc">송영 차량 도착 알림을 위해 위치 정보가 필요합니다</div>
+          </div>
+          <button class="permission-toggle on" onclick="togglePermission(this)"></button>
+        </div>
+
+        <div class="permission-item">
+          <div class="permission-icon" style="background: var(--warning-light);">📷</div>
+          <div class="permission-info">
+            <div class="permission-title">카메라 권한</div>
+            <div class="permission-desc">복약 사진 촬영 및 일과 보고 사진 업로드에 사용됩니다</div>
+          </div>
+          <button class="permission-toggle" onclick="togglePermission(this)"></button>
+        </div>
+
+        <div class="permission-item">
+          <div class="permission-icon" style="background: var(--secondary-light);">🖼️</div>
+          <div class="permission-info">
+            <div class="permission-title">사진첩 권한</div>
+            <div class="permission-desc">일과 보고 사진 갤러리 접근에 사용됩니다</div>
+          </div>
+          <button class="permission-toggle" onclick="togglePermission(this)"></button>
+        </div>
+
+        <div style="flex: 1;"></div>
+        <div class="card" style="background: var(--primary-light); text-align: center; margin-top: 16px;">
+          <div style="font-size: 32px; margin-bottom: 8px;">🎉</div>
+          <div style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">설정 완료!</div>
+          <div style="font-size: 12px; color: var(--text-secondary);">모든 준비가 끝났습니다. SilverSync를 시작해보세요.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 하단 네비게이션 -->
+    <div class="onboard-footer">
+      <div class="step-dots">
+        <div class="step-dot active" id="dot-1"></div>
+        <div class="step-dot" id="dot-2"></div>
+        <div class="step-dot" id="dot-3"></div>
+        <div class="step-dot" id="dot-4"></div>
+        <div class="step-dot" id="dot-5"></div>
+        <div class="step-dot" id="dot-6"></div>
+      </div>
+      <div class="onboard-nav">
+        <button class="btn btn-outline" id="prevBtn" onclick="prevStep()" style="display: none;">이전</button>
+        <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">시작하기</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentStep = 1;
+    const totalSteps = 6;
+
+    const stepLabels = {
+      1: { next: '시작하기', prev: '' },
+      2: { next: '인증 완료, 다음으로', prev: '이전' },
+      3: { next: '선택 완료', prev: '이전' },
+      4: { next: '시설 확인 완료', prev: '이전' },
+      5: { next: '어르신 연결 확인', prev: '이전' },
+      6: { next: '🎉 SilverSync 시작!', prev: '이전' },
+    };
+
+    function goToStep(step) {
+      // 이전 화면 숨기기
+      document.getElementById('step-' + currentStep).classList.remove('active');
+      // 새 화면 표시
+      currentStep = step;
+      document.getElementById('step-' + currentStep).classList.add('active');
+      // 도트 업데이트
+      updateDots();
+      // 버튼 업데이트
+      updateButtons();
+    }
+
+    function nextStep() {
+      if (currentStep < totalSteps) {
+        goToStep(currentStep + 1);
+      } else {
+        // 마지막 단계 - 시작 (facility.html이나 guardian.html로 이동)
+        alert('온보딩 완료! 메인 화면으로 이동합니다.');
+        window.location.href = 'guardian.html';
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 1) {
+        goToStep(currentStep - 1);
+      }
+    }
+
+    function updateDots() {
+      for (let i = 1; i <= totalSteps; i++) {
+        const dot = document.getElementById('dot-' + i);
+        dot.className = 'step-dot';
+        if (i === currentStep) {
+          dot.classList.add('active');
+        } else if (i < currentStep) {
+          dot.classList.add('completed');
+        }
+      }
+    }
+
+    function updateButtons() {
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+
+      prevBtn.style.display = currentStep === 1 ? 'none' : 'inline-flex';
+      nextBtn.textContent = stepLabels[currentStep].next;
+    }
+
+    function selectRole(el, role) {
+      document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function togglePermission(btn) {
+      btn.classList.toggle('on');
+    }
+  </script>
+</body>
+</html>
