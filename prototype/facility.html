@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SilverSync - 시설 직원 앱</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #E8F1FB 0%, #F5F7FA 100%);
+    }
+    .back-link {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: var(--card);
+      padding: 8px 16px;
+      border-radius: 20px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: var(--shadow);
+    }
+    .label { position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-link">← 목록으로</a>
+  <div class="label">🏥 시설 직원 앱</div>
+
+  <div class="phone-frame">
+    <!-- 상태바 -->
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">📶 🔋</span>
+    </div>
+
+    <!-- 앱 헤더 -->
+    <div class="app-header">
+      <div class="logo">
+        <div class="logo-icon">🤝</div>
+        <h1>SilverSync</h1>
+      </div>
+      <div class="header-actions">
+        <button class="header-btn notification-dot" title="알림">🔔</button>
+        <button class="header-btn" title="설정">⚙️</button>
+      </div>
+    </div>
+
+    <!-- 콘텐츠 영역 -->
+    <div class="content">
+      <!-- 홈 화면 -->
+      <div id="screen-home" class="screen active">
+        <!-- 시설 요약 -->
+        <div class="card" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white;">
+          <div style="font-size: 13px; opacity: 0.9;">조은아침 주간보호센터</div>
+          <div style="font-size: 20px; font-weight: 700; margin: 4px 0;">좋은 아침이에요, 최상아 센터장님 👋</div>
+          <div style="font-size: 12px; opacity: 0.8; margin-top: 8px;">2026년 2월 6일 목요일</div>
+          <div style="display: flex; gap: 16px; margin-top: 12px;">
+            <div><span style="font-size: 22px; font-weight: 700;">24</span><span style="font-size: 11px; opacity: 0.8;"> 이용 어르신</span></div>
+            <div><span style="font-size: 22px; font-weight: 700;">8</span><span style="font-size: 11px; opacity: 0.8;"> 직원 출근</span></div>
+            <div><span style="font-size: 22px; font-weight: 700;">2</span><span style="font-size: 11px; opacity: 0.8;"> 차량 운행</span></div>
+          </div>
+        </div>
+
+        <!-- 퀵 액션 -->
+        <div class="quick-actions">
+          <button class="quick-action" onclick="showScreen('screen-transport')">
+            <div class="quick-action-icon" style="background: #E8F1FB;">🚐</div>
+            <span class="quick-action-label">송영 관리</span>
+          </button>
+          <button class="quick-action" onclick="showScreen('screen-medication')">
+            <div class="quick-action-icon" style="background: #E8F8E9;">💊</div>
+            <span class="quick-action-label">복약 관리</span>
+          </button>
+          <button class="quick-action" onclick="showScreen('screen-chat')">
+            <div class="quick-action-icon" style="background: #FEF3E0;">💬</div>
+            <span class="quick-action-label">보호자 소통</span>
+          </button>
+          <button class="quick-action" onclick="showScreen('screen-report')">
+            <div class="quick-action-icon" style="background: #F3E8FB;">📋</div>
+            <span class="quick-action-label">일과 보고</span>
+          </button>
+        </div>
+
+        <!-- 오늘 송영 현황 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🚐 오늘 송영 현황</span>
+            <button class="card-more" onclick="showScreen('screen-transport')">전체보기</button>
+          </div>
+          <div class="timeline">
+            <div class="timeline-item completed">
+              <div class="timeline-time">07:30</div>
+              <div class="timeline-content">1호차 출발 <span class="badge badge-success">완료</span></div>
+            </div>
+            <div class="timeline-item completed">
+              <div class="timeline-time">07:45</div>
+              <div class="timeline-content">김영숙 어르신 탑승 <span class="badge badge-success">완료</span></div>
+            </div>
+            <div class="timeline-item active">
+              <div class="timeline-time">08:00</div>
+              <div class="timeline-content">박순자 어르신 픽업 중 <span class="badge badge-warning">이동중</span></div>
+            </div>
+            <div class="timeline-item pending">
+              <div class="timeline-time">08:15</div>
+              <div class="timeline-content">이옥순 어르신 픽업 예정</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 복약 알림 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">💊 복약 알림</span>
+            <button class="card-more" onclick="showScreen('screen-medication')">전체보기</button>
+          </div>
+          <div class="list-item">
+            <div class="avatar" style="background: #FDE8E6; color: var(--danger);">👵</div>
+            <div class="list-item-content">
+              <div class="list-item-title">김영숙 어르신</div>
+              <div class="list-item-subtitle">혈압약 · 아침 식후 30분</div>
+            </div>
+            <div class="list-item-trailing">
+              <span class="badge badge-danger">미복약</span>
+            </div>
+          </div>
+          <div class="list-item">
+            <div class="avatar" style="background: var(--secondary-light); color: var(--secondary);">👴</div>
+            <div class="list-item-content">
+              <div class="list-item-title">박순자 어르신</div>
+              <div class="list-item-subtitle">당뇨약 · 아침 식전</div>
+            </div>
+            <div class="list-item-trailing">
+              <span class="badge badge-success">완료</span>
+            </div>
+          </div>
+          <div class="list-item">
+            <div class="avatar" style="background: var(--warning-light); color: var(--warning);">👵</div>
+            <div class="list-item-content">
+              <div class="list-item-title">이옥순 어르신</div>
+              <div class="list-item-subtitle">관절약 · 09:00 예정</div>
+            </div>
+            <div class="list-item-trailing">
+              <span class="badge badge-primary">예정</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 오늘 프로그램 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📚 오늘 프로그램</span>
+            <button class="card-more">전체보기</button>
+          </div>
+          <div class="list-item">
+            <div class="quick-action-icon" style="background: #E8F8E9; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center;">🎨</div>
+            <div class="list-item-content">
+              <div class="list-item-title">미술치료</div>
+              <div class="list-item-subtitle">10:00~11:00 · 김미영 강사</div>
+            </div>
+            <span class="badge badge-primary">12명 참여</span>
+          </div>
+          <div class="list-item">
+            <div class="quick-action-icon" style="background: #FEF3E0; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center;">🎵</div>
+            <div class="list-item-content">
+              <div class="list-item-title">음악치료</div>
+              <div class="list-item-subtitle">14:00~15:00 · 박지현 강사</div>
+            </div>
+            <span class="badge badge-primary">15명 참여</span>
+          </div>
+          <div class="list-item">
+            <div class="quick-action-icon" style="background: #F3E8FB; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center;">🧠</div>
+            <div class="list-item-content">
+              <div class="list-item-title">인지훈련</div>
+              <div class="list-item-subtitle">15:30~16:30 · 이수진 사회복지사</div>
+            </div>
+            <span class="badge badge-primary">8명 참여</span>
+          </div>
+        </div>
+
+        <!-- 오늘 식단 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🍚 오늘 식단</span>
+          </div>
+          <div class="meal-card">
+            <div class="meal-type" style="background: #FEF3E0;">🌅</div>
+            <div class="meal-info">
+              <div class="meal-label">아침</div>
+              <div class="meal-menu">쌀밥, 된장찌개, 계란말이, 시금치나물, 깍두기</div>
+            </div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-type" style="background: #E8F1FB;">☀️</div>
+            <div class="meal-info">
+              <div class="meal-label">점심</div>
+              <div class="meal-menu">잡곡밥, 미역국, 제육볶음, 콩나물무침, 배추김치</div>
+            </div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-type" style="background: #E8F8E9;">🍵</div>
+            <div class="meal-info">
+              <div class="meal-label">간식</div>
+              <div class="meal-menu">고구마 찐 것, 요거트, 과일(사과)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 송영 관리 화면 -->
+      <div id="screen-transport" class="screen">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <button onclick="showScreen('screen-home')" style="background:none; border:none; font-size:20px; cursor:pointer;">←</button>
+          <div class="section-title" style="margin:0;">🚐 송영 관리</div>
+        </div>
+
+        <!-- 지도 -->
+        <div class="map-placeholder">
+          <div class="map-icon">📍</div>
+          <div class="map-text">네이버 지도 - 실시간 차량 위치</div>
+        </div>
+
+        <!-- 차량 현황 -->
+        <div class="stat-row">
+          <div class="stat-card">
+            <div class="stat-value" style="color: var(--secondary);">1</div>
+            <div class="stat-label">운행 중</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color: var(--warning);">3</div>
+            <div class="stat-label">탑승 완료</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color: var(--text-light);">5</div>
+            <div class="stat-label">픽업 대기</div>
+          </div>
+        </div>
+
+        <!-- 1호차 -->
+        <div class="card">
+          <div class="card-header">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:20px;">🚐</span>
+              <div>
+                <div class="card-title">1호차</div>
+                <div style="font-size:11px; color:var(--text-secondary);">기사: 홍길동 · 울산 123가 4567</div>
+              </div>
+            </div>
+            <span class="badge badge-success">운행중</span>
+          </div>
+
+          <div class="list-item" style="padding: 8px 0;">
+            <div class="avatar-sm avatar" style="font-size:14px;">👵</div>
+            <div class="list-item-content">
+              <div class="list-item-title">김영숙 어르신</div>
+              <div class="list-item-subtitle">울산 북구 호계동</div>
+            </div>
+            <button class="btn btn-sm btn-success" style="pointer-events:none;">탑승 ✓</button>
+          </div>
+          <div class="list-item" style="padding: 8px 0;">
+            <div class="avatar-sm avatar" style="font-size:14px;">👴</div>
+            <div class="list-item-content">
+              <div class="list-item-title">박순자 어르신</div>
+              <div class="list-item-subtitle">울산 북구 연암동</div>
+            </div>
+            <button class="btn btn-sm btn-primary">탑승 체크</button>
+          </div>
+          <div class="list-item" style="padding: 8px 0;">
+            <div class="avatar-sm avatar" style="font-size:14px; background:var(--bg); color:var(--text-light);">👵</div>
+            <div class="list-item-content">
+              <div class="list-item-title" style="color:var(--text-light);">이옥순 어르신</div>
+              <div class="list-item-subtitle">울산 북구 매곡동</div>
+            </div>
+            <span class="badge" style="background:var(--bg); color:var(--text-light);">대기</span>
+          </div>
+        </div>
+
+        <!-- 2호차 -->
+        <div class="card">
+          <div class="card-header">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:20px;">🚐</span>
+              <div>
+                <div class="card-title">2호차</div>
+                <div style="font-size:11px; color:var(--text-secondary);">기사: 김영수 · 울산 456나 7890</div>
+              </div>
+            </div>
+            <span class="badge" style="background:var(--bg); color:var(--text-secondary);">출발 전</span>
+          </div>
+          <div style="font-size:13px; color:var(--text-secondary); padding:8px 0;">
+            08:30 출발 예정 · 어르신 4명
+          </div>
+        </div>
+      </div>
+
+      <!-- 복약 관리 화면 -->
+      <div id="screen-medication" class="screen">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <button onclick="showScreen('screen-home')" style="background:none; border:none; font-size:20px; cursor:pointer;">←</button>
+          <div class="section-title" style="margin:0;">💊 복약 관리</div>
+        </div>
+
+        <!-- 오늘 복약 요약 -->
+        <div class="stat-row">
+          <div class="stat-card">
+            <div class="stat-value" style="color: var(--secondary);">18</div>
+            <div class="stat-label">완료</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color: var(--danger);">2</div>
+            <div class="stat-label">미복약</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color: var(--primary);">12</div>
+            <div class="stat-label">예정</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 8px; font-size: 12px; color: var(--text-secondary);">복약 준수율</div>
+        <div class="progress-bar" style="margin-bottom: 16px;">
+          <div class="progress-fill" style="width: 90%; background: var(--secondary);"></div>
+        </div>
+        <div style="text-align: right; font-size: 12px; color: var(--secondary); font-weight: 600; margin-bottom: 16px;">90%</div>
+
+        <!-- 미복약 알림 -->
+        <div class="card" style="border-left: 4px solid var(--danger);">
+          <div class="card-header">
+            <span class="card-title" style="color: var(--danger);">⚠️ 미복약 알림</span>
+          </div>
+          <div class="list-item">
+            <div class="avatar" style="background: #FDE8E6; color: var(--danger);">👵</div>
+            <div class="list-item-content">
+              <div class="list-item-title">김영숙 어르신</div>
+              <div class="list-item-subtitle">혈압약 (아모디핀 5mg) · 08:00 예정</div>
+            </div>
+            <div>
+              <button class="btn btn-sm btn-success">복약 완료</button>
+            </div>
+          </div>
+          <div class="list-item">
+            <div class="avatar" style="background: #FDE8E6; color: var(--danger);">👴</div>
+            <div class="list-item-content">
+              <div class="list-item-title">정태수 어르신</div>
+              <div class="list-item-subtitle">위장약 (란소프라졸) · 08:00 예정</div>
+            </div>
+            <div>
+              <button class="btn btn-sm btn-success">복약 완료</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 예정 목록 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📋 09:00 예정</span>
+            <span class="badge badge-primary">5건</span>
+          </div>
+          <div class="list-item">
+            <div class="avatar-sm avatar" style="font-size:14px;">👵</div>
+            <div class="list-item-content">
+              <div class="list-item-title">이옥순 어르신</div>
+              <div class="list-item-subtitle">관절약 (셀레콕시브 200mg)</div>
+            </div>
+            <span class="badge badge-primary">09:00</span>
+          </div>
+          <div class="list-item">
+            <div class="avatar-sm avatar" style="font-size:14px;">👴</div>
+            <div class="list-item-content">
+              <div class="list-item-title">한동수 어르신</div>
+              <div class="list-item-subtitle">혈당약 (메트포르민 500mg)</div>
+            </div>
+            <span class="badge badge-primary">09:00</span>
+          </div>
+          <div class="list-item">
+            <div class="avatar-sm avatar" style="font-size:14px;">👵</div>
+            <div class="list-item-content">
+              <div class="list-item-title">최순옥 어르신</div>
+              <div class="list-item-subtitle">치매약 (도네페질 5mg)</div>
+            </div>
+            <span class="badge badge-primary">09:00</span>
+          </div>
+        </div>
+
+        <!-- 완료 목록 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">✅ 복약 완료</span>
+            <span class="badge badge-success">18건</span>
+          </div>
+          <div class="list-item">
+            <div class="avatar-sm avatar" style="font-size:14px; background:var(--secondary-light); color:var(--secondary);">👴</div>
+            <div class="list-item-content">
+              <div class="list-item-title">박순자 어르신</div>
+              <div class="list-item-subtitle">당뇨약 · 07:50 복약</div>
+            </div>
+            <span style="font-size:11px; color:var(--secondary);">📸 사진첨부</span>
+          </div>
+          <div class="list-item">
+            <div class="avatar-sm avatar" style="font-size:14px; background:var(--secondary-light); color:var(--secondary);">👵</div>
+            <div class="list-item-content">
+              <div class="list-item-title">강미자 어르신</div>
+              <div class="list-item-subtitle">혈압약 · 07:55 복약</div>
+            </div>
+            <span style="font-size:11px; color:var(--secondary);">📸 사진첨부</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 보호자 소통 화면 -->
+      <div id="screen-chat" class="screen">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <button onclick="showScreen('screen-home')" style="background:none; border:none; font-size:20px; cursor:pointer;">←</button>
+          <div class="section-title" style="margin:0;">💬 보호자 소통</div>
+        </div>
+
+        <!-- 공지사항 -->
+        <div class="card" style="background: var(--primary-light); border: 1px solid rgba(74,144,217,0.2);">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size:18px;">📢</span>
+            <div>
+              <div style="font-size: 13px; font-weight: 600;">설 연휴 안내</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">2/7~2/10 휴관합니다</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 대화 목록 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">최근 대화</span>
+            <button class="btn btn-sm btn-primary">+ 새 공지</button>
+          </div>
+
+          <div class="list-item" style="cursor: pointer;">
+            <div class="avatar notification-dot">👩</div>
+            <div class="list-item-content">
+              <div class="list-item-title">김영숙 어르신 보호자 (김지영)</div>
+              <div class="list-item-subtitle" style="color: var(--text);">어머니 오늘 컨디션은 어떠세요?</div>
+            </div>
+            <div class="list-item-trailing">
+              <div style="font-size:11px; color:var(--text-light);">9:30</div>
+              <div style="width:18px; height:18px; background:var(--primary); color:white; border-radius:50%; font-size:10px; display:flex; align-items:center; justify-content:center; margin-top:4px; margin-left:auto;">1</div>
+            </div>
+          </div>
+
+          <div class="list-item" style="cursor: pointer;">
+            <div class="avatar">👨</div>
+            <div class="list-item-content">
+              <div class="list-item-title">박순자 어르신 보호자 (박철수)</div>
+              <div class="list-item-subtitle">네, 알겠습니다. 감사합니다.</div>
+            </div>
+            <div class="list-item-trailing">
+              <div style="font-size:11px; color:var(--text-light);">어제</div>
+            </div>
+          </div>
+
+          <div class="list-item" style="cursor: pointer;">
+            <div class="avatar">👩</div>
+            <div class="list-item-content">
+              <div class="list-item-title">이옥순 어르신 보호자 (이민정)</div>
+              <div class="list-item-subtitle">다음주 병원 예약이 있어서요...</div>
+            </div>
+            <div class="list-item-trailing">
+              <div style="font-size:11px; color:var(--text-light);">2/4</div>
+            </div>
+          </div>
+
+          <div class="list-item" style="cursor: pointer;">
+            <div class="avatar">👨</div>
+            <div class="list-item-content">
+              <div class="list-item-title">한동수 어르신 보호자 (한서준)</div>
+              <div class="list-item-subtitle">사진 감사합니다 😊</div>
+            </div>
+            <div class="list-item-trailing">
+              <div style="font-size:11px; color:var(--text-light);">2/3</div>
+            </div>
+          </div>
+
+          <div class="list-item" style="cursor: pointer;">
+            <div class="avatar">👩</div>
+            <div class="list-item-content">
+              <div class="list-item-title">최순옥 어르신 보호자 (최유진)</div>
+              <div class="list-item-subtitle">상담 예약 가능할까요?</div>
+            </div>
+            <div class="list-item-trailing">
+              <div style="font-size:11px; color:var(--text-light);">2/2</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 일과 보고 화면 -->
+      <div id="screen-report" class="screen">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <button onclick="showScreen('screen-home')" style="background:none; border:none; font-size:20px; cursor:pointer;">←</button>
+          <div class="section-title" style="margin:0;">📋 일과 보고</div>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-bottom:16px;">
+          <button class="btn btn-primary btn-sm" style="flex:1;">+ 새 보고서 작성</button>
+          <button class="btn btn-outline btn-sm" style="flex:1;">📸 사진 일괄 업로드</button>
+        </div>
+
+        <!-- 미작성 -->
+        <div class="card" style="border-left: 4px solid var(--warning);">
+          <div class="card-header">
+            <span class="card-title" style="color: var(--warning);">✏️ 미작성 보고서</span>
+            <span class="badge badge-warning">6명</span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+            <div style="display:flex; align-items:center; gap:6px; padding:6px 10px; background:var(--warning-light); border-radius:20px; font-size:12px;">👵 김영숙</div>
+            <div style="display:flex; align-items:center; gap:6px; padding:6px 10px; background:var(--warning-light); border-radius:20px; font-size:12px;">👴 정태수</div>
+            <div style="display:flex; align-items:center; gap:6px; padding:6px 10px; background:var(--warning-light); border-radius:20px; font-size:12px;">👵 이옥순</div>
+            <div style="display:flex; align-items:center; gap:6px; padding:6px 10px; background:var(--warning-light); border-radius:20px; font-size:12px;">+3명</div>
+          </div>
+        </div>
+
+        <!-- 작성 완료 예시 -->
+        <div class="card">
+          <div class="card-header">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="avatar">👴</div>
+              <div>
+                <div class="card-title">박순자 어르신</div>
+                <div style="font-size:11px; color:var(--text-secondary);">장기요양 3등급 · 82세</div>
+              </div>
+            </div>
+            <span class="badge badge-success">작성완료</span>
+          </div>
+
+          <div style="display:flex; gap:8px; margin: 8px 0;">
+            <div style="padding:6px 10px; background:var(--secondary-light); border-radius:8px; font-size:12px;">컨디션: 😊 좋음</div>
+            <div style="padding:6px 10px; background:var(--primary-light); border-radius:8px; font-size:12px;">식욕: 🍚 보통</div>
+            <div style="padding:6px 10px; background:var(--secondary-light); border-radius:8px; font-size:12px;">기분: 😄 즐거움</div>
+          </div>
+
+          <div style="font-size:13px; color:var(--text-secondary); margin: 8px 0; line-height:1.6;">
+            오늘 미술치료 시간에 수채화 그리기에 적극 참여하셨습니다. 점심 식사도 잘 하셨고, 오후 산책 시간에도 기분 좋게 참여하셨습니다.
+          </div>
+
+          <div style="display:flex; gap:6px;">
+            <div style="width:60px; height:60px; background:var(--primary-light); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:24px;">🎨</div>
+            <div style="width:60px; height:60px; background:var(--secondary-light); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:24px;">🚶</div>
+            <div style="width:60px; height:60px; background:var(--warning-light); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:24px;">🍚</div>
+            <div style="width:60px; height:60px; background:var(--bg); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; color:var(--text-light);">+2</div>
+          </div>
+        </div>
+
+        <!-- 어르신 목록 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">전체 어르신 목록</span>
+          </div>
+          <div class="list-item">
+            <div class="avatar-sm avatar" style="font-size:14px; background:var(--secondary-light); color:var(--secondary);">👵</div>
+            <div class="list-item-content">
+              <div class="list-item-title">강미자 어르신</div>
+              <div class="list-item-subtitle">장기요양 2등급</div>
+            </div>
+            <span class="badge badge-success">작성완료</span>
+          </div>
+          <div class="list-item">
+            <div class="avatar-sm avatar" style="font-size:14px; background:var(--secondary-light); color:var(--secondary);">👴</div>
+            <div class="list-item-content">
+              <div class="list-item-title">한동수 어르신</div>
+              <div class="list-item-subtitle">장기요양 3등급</div>
+            </div>
+            <span class="badge badge-success">작성완료</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 하단 탭바 -->
+    <div class="tab-bar">
+      <button class="tab-item active" onclick="showScreen('screen-home'); setActiveTab(this);">
+        <span class="tab-icon">🏠</span>
+        <span>홈</span>
+      </button>
+      <button class="tab-item" onclick="showScreen('screen-transport'); setActiveTab(this);">
+        <span class="tab-icon">🚐</span>
+        <span>송영</span>
+      </button>
+      <button class="tab-item" onclick="showScreen('screen-medication'); setActiveTab(this);">
+        <span class="tab-icon">💊</span>
+        <span>복약</span>
+      </button>
+      <button class="tab-item" onclick="showScreen('screen-chat'); setActiveTab(this);">
+        <span class="tab-icon notification-dot">💬</span>
+        <span>소통</span>
+      </button>
+      <button class="tab-item" onclick="showScreen('screen-report'); setActiveTab(this);">
+        <span class="tab-icon">📋</span>
+        <span>보고</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+      document.querySelector('.content').scrollTop = 0;
+    }
+
+    function setActiveTab(el) {
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+  </script>
+</body>
+</html>

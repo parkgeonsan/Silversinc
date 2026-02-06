@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SilverSync - 프로토타입</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: linear-gradient(135deg, #F5F7FA 0%, #E8F1FB 100%); min-height: 100vh; }
+    .index-container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; }
+    .hero { text-align: center; margin-bottom: 60px; }
+    .hero-logo {
+      width: 80px; height: 80px; background: var(--primary); border-radius: 20px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 44px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(74,144,217,0.3);
+    }
+    .hero h1 { font-size: 40px; font-weight: 700; margin-bottom: 12px; }
+    .hero h1 span { color: var(--primary); }
+    .hero p { font-size: 18px; color: var(--text-secondary); max-width: 500px; margin: 0 auto; line-height: 1.7; }
+    .hero .version { display: inline-block; margin-top: 16px; padding: 4px 14px; background: var(--primary-light); color: var(--primary); border-radius: 20px; font-size: 13px; font-weight: 600; }
+    .app-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; margin-bottom: 60px; }
+    .app-card {
+      background: var(--card); border-radius: 20px; padding: 32px; text-align: center;
+      box-shadow: var(--shadow-lg); transition: transform 0.3s;
+    }
+    .app-card:hover { transform: translateY(-4px); }
+    .app-card-icon { font-size: 48px; margin-bottom: 16px; }
+    .app-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    .app-card p { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6; }
+    .app-card .features { text-align: left; margin-bottom: 24px; }
+    .app-card .features li { font-size: 13px; color: var(--text-secondary); padding: 4px 0; list-style: none; }
+    .app-card .features li::before { content: '✓ '; color: var(--secondary); font-weight: 700; }
+    .app-card .btn { width: 100%; padding: 14px; font-size: 15px; border-radius: 12px; text-decoration: none; }
+    .tech-section { background: var(--card); border-radius: 20px; padding: 32px; box-shadow: var(--shadow); }
+    .tech-section h2 { font-size: 20px; font-weight: 700; margin-bottom: 20px; text-align: center; }
+    .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .tech-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg); border-radius: 12px; }
+    .tech-item-icon { font-size: 28px; }
+    .tech-item-label { font-size: 13px; font-weight: 600; }
+    .tech-item-desc { font-size: 11px; color: var(--text-secondary); }
+    .footer { text-align: center; margin-top: 48px; color: var(--text-light); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="index-container">
+    <!-- 히어로 -->
+    <div class="hero">
+      <div class="hero-logo">🤝</div>
+      <h1><span>Silver</span>Sync</h1>
+      <p>노인장기요양 시설과 보호자를 연결하는<br>정보 동기화 솔루션</p>
+      <div class="version">Prototype v0.1 · 2026.02</div>
+    </div>
+
+    <!-- 앱 카드 -->
+    <div class="app-cards">
+      <div class="app-card">
+        <div class="app-card-icon">🏥</div>
+        <h2>시설 직원 앱</h2>
+        <p>어르신 관리, 송영, 복약 기록,<br>보호자 소통을 한 곳에서</p>
+        <ul class="features">
+          <li>송영 차량 위치 공유 & 탑승 체크</li>
+          <li>복약 스케줄 관리 & 기록</li>
+          <li>일과 보고서 & 사진 공유</li>
+          <li>보호자 1:1 채팅 & 공지</li>
+          <li>교육 프로그램 & 식단 관리</li>
+        </ul>
+        <a href="facility.html" class="btn btn-primary">시설 앱 보기 →</a>
+      </div>
+
+      <div class="app-card">
+        <div class="app-card-icon">👨‍👩‍👧‍👦</div>
+        <h2>보호자 앱</h2>
+        <p>우리 부모님의 하루를<br>실시간으로 확인</p>
+        <ul class="features">
+          <li>송영 차량 실시간 위치 확인</li>
+          <li>복약 현황 & 알림 수신</li>
+          <li>일과 보고 & 사진 갤러리</li>
+          <li>시설 직원과 1:1 채팅</li>
+          <li>식단표 & 프로그램 일정 확인</li>
+        </ul>
+        <a href="guardian.html" class="btn btn-primary">보호자 앱 보기 →</a>
+      </div>
+    </div>
+
+    <!-- 기술 스택 -->
+    <div class="tech-section">
+      <h2>기술 스택</h2>
+      <div class="tech-grid">
+        <div class="tech-item">
+          <div class="tech-item-icon">💙</div>
+          <div>
+            <div class="tech-item-label">Flutter</div>
+            <div class="tech-item-desc">iOS + Android + Web</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-item-icon">⚡</div>
+          <div>
+            <div class="tech-item-label">Supabase</div>
+            <div class="tech-item-desc">Auth · DB · Realtime · Storage</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-item-icon">🗺️</div>
+          <div>
+            <div class="tech-item-label">네이버 지도</div>
+            <div class="tech-item-desc">실시간 차량 위치 추적</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-item-icon">🔔</div>
+          <div>
+            <div class="tech-item-label">FCM</div>
+            <div class="tech-item-desc">푸시 알림 · SMS 연동</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-item-icon">🐘</div>
+          <div>
+            <div class="tech-item-label">PostgreSQL</div>
+            <div class="tech-item-desc">RLS 보안 · 실시간 구독</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-item-icon">🦕</div>
+          <div>
+            <div class="tech-item-label">Edge Functions</div>
+            <div class="tech-item-desc">Deno 서버리스 함수</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>SilverSync &copy; 2026 · 노인장기요양 시설·보호자 정보 동기화 솔루션</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SilverSync - 보호자 앱</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #E8F8E9 0%, #F5F7FA 100%);
+    }
+    .back-link {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: var(--card);
+      padding: 8px 16px;
+      border-radius: 20px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: var(--shadow);
+    }
+    .label { position: fixed; top: 20px; right: 20px; background: var(--secondary); color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+
+    .guardian-hero {
+      background: linear-gradient(135deg, #6CC070, #4AA84E);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      color: white;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .guardian-hero::after {
+      content: '';
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      width: 100px;
+      height: 100px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-link">← 목록으로</a>
+  <div class="label">👨‍👩‍👧 보호자 앱</div>
+
+  <div class="phone-frame">
+    <!-- 상태바 -->
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">📶 🔋</span>
+    </div>
+
+    <!-- 앱 헤더 -->
+    <div class="app-header">
+      <div class="logo">
+        <div class="logo-icon" style="background: var(--secondary);">🤝</div>
+        <h1>SilverSync</h1>
+      </div>
+      <div class="header-actions">
+        <button class="header-btn notification-dot" title="알림">🔔</button>
+      </div>
+    </div>
+
+    <!-- 콘텐츠 영역 -->
+    <div class="content">
+      <!-- 홈 화면 -->
+      <div id="screen-home" class="screen active">
+        <!-- 어르신 프로필 카드 -->
+        <div class="guardian-hero">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div class="avatar-lg" style="background: rgba(255,255,255,0.2); color: white; font-size:30px;">👵</div>
+            <div>
+              <div style="font-size: 11px; opacity: 0.8;">조은아침 주간보호센터</div>
+              <div style="font-size: 20px; font-weight: 700;">김영숙 어르신</div>
+              <div style="font-size: 12px; opacity: 0.8; margin-top: 2px;">장기요양 3등급 · 85세</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 12px; margin-top: 16px;">
+            <div style="flex:1; background:rgba(255,255,255,0.15); border-radius:10px; padding:8px; text-align:center;">
+              <div style="font-size:18px; font-weight:700;">😊</div>
+              <div style="font-size:10px; opacity:0.8; margin-top:2px;">오늘 컨디션</div>
+            </div>
+            <div style="flex:1; background:rgba(255,255,255,0.15); border-radius:10px; padding:8px; text-align:center;">
+              <div style="font-size:18px; font-weight:700;">💊 2/3</div>
+              <div style="font-size:10px; opacity:0.8; margin-top:2px;">오늘 복약</div>
+            </div>
+            <div style="flex:1; background:rgba(255,255,255,0.15); border-radius:10px; padding:8px; text-align:center;">
+              <div style="font-size:18px; font-weight:700;">🚐</div>
+              <div style="font-size:10px; opacity:0.8; margin-top:2px;">등원 완료</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 실시간 알림 배너 -->
+        <div class="card" style="background: var(--warning-light); border: 1px solid rgba(245,166,35,0.3);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 24px;">🚐</span>
+            <div style="flex:1;">
+              <div style="font-size: 13px; font-weight: 600; color: var(--warning);">하원 차량 이동 중</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">1호차가 센터에서 출발했습니다 · 도착 예정 16:30</div>
+            </div>
+            <button class="btn btn-sm" style="background:var(--warning); color:white;" onclick="showScreen('screen-transport'); setActiveTab(document.querySelectorAll('.tab-item')[1]);">확인</button>
+          </div>
+        </div>
+
+        <!-- 퀵 액션 -->
+        <div class="quick-actions">
+          <button class="quick-action" onclick="showScreen('screen-transport'); setActiveTab(document.querySelectorAll('.tab-item')[1]);">
+            <div class="quick-action-icon" style="background: #E8F1FB;">🚐</div>
+            <span class="quick-action-label">송영 위치</span>
+          </button>
+          <button class="quick-action" onclick="showScreen('screen-medication'); setActiveTab(document.querySelectorAll('.tab-item')[2]);">
+            <div class="quick-action-icon" style="background: #E8F8E9;">💊</div>
+            <span class="quick-action-label">복약 현황</span>
+          </button>
+          <button class="quick-action" onclick="showScreen('screen-daily'); setActiveTab(document.querySelectorAll('.tab-item')[3]);">
+            <div class="quick-action-icon" style="background: #FEF3E0;">📋</div>
+            <span class="quick-action-label">일과 보고</span>
+          </button>
+          <button class="quick-action" onclick="showScreen('screen-chat'); setActiveTab(document.querySelectorAll('.tab-item')[4]);">
+            <div class="quick-action-icon" style="background: #F3E8FB;">💬</div>
+            <span class="quick-action-label">시설 연락</span>
+          </button>
+        </div>
+
+        <!-- 오늘 복약 현황 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">💊 오늘 복약 현황</span>
+            <button class="card-more" onclick="showScreen('screen-medication'); setActiveTab(document.querySelectorAll('.tab-item')[2]);">전체보기</button>
+          </div>
+          <div class="list-item">
+            <div style="width:8px; height:8px; border-radius:50%; background:var(--secondary); flex-shrink:0;"></div>
+            <div class="list-item-content">
+              <div class="list-item-title">혈압약 (아모디핀 5mg)</div>
+              <div class="list-item-subtitle">아침 식후 · 08:05 복약 완료</div>
+            </div>
+            <span class="badge badge-success">완료 ✓</span>
+          </div>
+          <div class="list-item">
+            <div style="width:8px; height:8px; border-radius:50%; background:var(--secondary); flex-shrink:0;"></div>
+            <div class="list-item-content">
+              <div class="list-item-title">당뇨약 (메트포르민 500mg)</div>
+              <div class="list-item-subtitle">아침 식후 · 08:05 복약 완료</div>
+            </div>
+            <span class="badge badge-success">완료 ✓</span>
+          </div>
+          <div class="list-item">
+            <div style="width:8px; height:8px; border-radius:50%; background:var(--primary); flex-shrink:0;"></div>
+            <div class="list-item-content">
+              <div class="list-item-title">관절약 (셀레콕시브 200mg)</div>
+              <div class="list-item-subtitle">점심 식후 · 12:30 예정</div>
+            </div>
+            <span class="badge badge-primary">예정</span>
+          </div>
+        </div>
+
+        <!-- 오늘 식단 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🍚 오늘 식단</span>
+          </div>
+          <div class="meal-card">
+            <div class="meal-type" style="background: #FEF3E0;">🌅</div>
+            <div class="meal-info">
+              <div class="meal-label">아침</div>
+              <div class="meal-menu">쌀밥, 된장찌개, 계란말이, 시금치나물, 깍두기</div>
+            </div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-type" style="background: #E8F1FB;">☀️</div>
+            <div class="meal-info">
+              <div class="meal-label">점심</div>
+              <div class="meal-menu">잡곡밥, 미역국, 제육볶음, 콩나물무침, 배추김치</div>
+            </div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-type" style="background: #E8F8E9;">🍵</div>
+            <div class="meal-info">
+              <div class="meal-label">간식</div>
+              <div class="meal-menu">고구마 찐 것, 요거트, 과일(사과)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 오늘 프로그램 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📚 오늘 프로그램</span>
+          </div>
+          <div class="list-item">
+            <div style="width:36px; height:36px; background:#E8F8E9; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px;">🎨</div>
+            <div class="list-item-content">
+              <div class="list-item-title">미술치료</div>
+              <div class="list-item-subtitle">10:00~11:00</div>
+            </div>
+            <span class="badge badge-success">참여 ✓</span>
+          </div>
+          <div class="list-item">
+            <div style="width:36px; height:36px; background:#FEF3E0; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px;">🎵</div>
+            <div class="list-item-content">
+              <div class="list-item-title">음악치료</div>
+              <div class="list-item-subtitle">14:00~15:00</div>
+            </div>
+            <span class="badge badge-primary">예정</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 송영 위치 화면 -->
+      <div id="screen-transport" class="screen">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <button onclick="showScreen('screen-home'); setActiveTab(document.querySelectorAll('.tab-item')[0]);" style="background:none; border:none; font-size:20px; cursor:pointer;">←</button>
+          <div class="section-title" style="margin:0;">🚐 송영 차량 위치</div>
+        </div>
+
+        <!-- 지도 (더 큼) -->
+        <div class="map-placeholder" style="height: 260px;">
+          <div class="map-icon">📍</div>
+          <div class="map-text">네이버 지도 - 실시간 차량 위치</div>
+          <div style="z-index:1; position:absolute; bottom:12px; left:12px; background:rgba(255,255,255,0.9); padding:6px 12px; border-radius:8px; font-size:11px;">
+            🚐 도착 예정: <strong>약 15분</strong>
+          </div>
+        </div>
+
+        <!-- 오늘 송영 기록 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">오늘 송영 현황</span>
+          </div>
+          <div class="timeline">
+            <div class="timeline-item completed">
+              <div class="timeline-time">07:30</div>
+              <div class="timeline-content">1호차 센터 출발</div>
+            </div>
+            <div class="timeline-item completed">
+              <div class="timeline-time">07:52</div>
+              <div class="timeline-content">
+                김영숙 어르신 탑승 완료
+                <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">울산 북구 호계동 픽업</div>
+              </div>
+            </div>
+            <div class="timeline-item completed">
+              <div class="timeline-time">08:15</div>
+              <div class="timeline-content">센터 도착</div>
+            </div>
+            <div class="timeline-item active">
+              <div class="timeline-time">16:00</div>
+              <div class="timeline-content">
+                하원 차량 이동 중
+                <div style="font-size:11px; color:var(--warning); margin-top:2px;">현재 울산 북구 명촌동 부근</div>
+              </div>
+            </div>
+            <div class="timeline-item pending">
+              <div class="timeline-time">16:30 (예정)</div>
+              <div class="timeline-content">김영숙 어르신 하차</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 차량 정보 -->
+        <div class="card">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="font-size:32px;">🚐</div>
+            <div>
+              <div style="font-size:14px; font-weight:600;">1호차 · 울산 123가 4567</div>
+              <div style="font-size:12px; color:var(--text-secondary);">기사: 홍길동 · 010-1234-5678</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;">
+            <button class="btn btn-outline btn-block">📞 기사님에게 전화</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 복약 현황 화면 -->
+      <div id="screen-medication" class="screen">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <button onclick="showScreen('screen-home'); setActiveTab(document.querySelectorAll('.tab-item')[0]);" style="background:none; border:none; font-size:20px; cursor:pointer;">←</button>
+          <div class="section-title" style="margin:0;">💊 복약 현황</div>
+        </div>
+
+        <!-- 이번 주 준수율 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">이번 주 복약 준수율</span>
+            <span style="font-size:20px; font-weight:700; color:var(--secondary);">95%</span>
+          </div>
+          <div class="progress-bar" style="height:8px;">
+            <div class="progress-fill" style="width: 95%; background: var(--secondary);"></div>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:11px; color:var(--text-secondary);">
+            <span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:4px;">
+            <div style="width:30px; height:30px; border-radius:50%; background:var(--secondary-light); display:flex; align-items:center; justify-content:center; font-size:12px;">✓</div>
+            <div style="width:30px; height:30px; border-radius:50%; background:var(--secondary-light); display:flex; align-items:center; justify-content:center; font-size:12px;">✓</div>
+            <div style="width:30px; height:30px; border-radius:50%; background:var(--secondary-light); display:flex; align-items:center; justify-content:center; font-size:12px;">✓</div>
+            <div style="width:30px; height:30px; border-radius:50%; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; border:2px solid var(--primary);">오늘</div>
+            <div style="width:30px; height:30px; border-radius:50%; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--text-light);">-</div>
+            <div style="width:30px; height:30px; border-radius:50%; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--text-light);">-</div>
+            <div style="width:30px; height:30px; border-radius:50%; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--text-light);">-</div>
+          </div>
+        </div>
+
+        <!-- 오늘 복약 상세 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">오늘 복약 상세</span>
+          </div>
+
+          <div style="padding:12px; background:var(--secondary-light); border-radius:10px; margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:13px; font-weight:600;">💊 혈압약 (아모디핀 5mg)</div>
+                <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">아침 식후 30분 · 1정</div>
+              </div>
+              <span class="badge badge-success">08:05 복약</span>
+            </div>
+            <div style="margin-top:8px; font-size:11px; color:var(--text-secondary);">
+              기록자: 이수진 사회복지사 · 📸 사진 확인
+            </div>
+          </div>
+
+          <div style="padding:12px; background:var(--secondary-light); border-radius:10px; margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:13px; font-weight:600;">💊 당뇨약 (메트포르민 500mg)</div>
+                <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">아침 식후 · 1정</div>
+              </div>
+              <span class="badge badge-success">08:05 복약</span>
+            </div>
+            <div style="margin-top:8px; font-size:11px; color:var(--text-secondary);">
+              기록자: 이수진 사회복지사 · 📸 사진 확인
+            </div>
+          </div>
+
+          <div style="padding:12px; background:var(--primary-light); border-radius:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:13px; font-weight:600;">💊 관절약 (셀레콕시브 200mg)</div>
+                <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">점심 식후 · 1정</div>
+              </div>
+              <span class="badge badge-primary">12:30 예정</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 처방 정보 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">💉 현재 처방약</span>
+          </div>
+          <div class="list-item">
+            <div class="list-item-content">
+              <div class="list-item-title">아모디핀 5mg</div>
+              <div class="list-item-subtitle">고혈압 · 1일 1회 아침 식후 · 처방: 울산병원 김의사</div>
+            </div>
+          </div>
+          <div class="list-item">
+            <div class="list-item-content">
+              <div class="list-item-title">메트포르민 500mg</div>
+              <div class="list-item-subtitle">당뇨 · 1일 2회 식후 · 처방: 울산병원 김의사</div>
+            </div>
+          </div>
+          <div class="list-item">
+            <div class="list-item-content">
+              <div class="list-item-title">셀레콕시브 200mg</div>
+              <div class="list-item-subtitle">관절염 · 1일 1회 점심 식후 · 처방: 정형외과 박의사</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 일과 보고 화면 -->
+      <div id="screen-daily" class="screen">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <button onclick="showScreen('screen-home'); setActiveTab(document.querySelectorAll('.tab-item')[0]);" style="background:none; border:none; font-size:20px; cursor:pointer;">←</button>
+          <div class="section-title" style="margin:0;">📋 일과 보고</div>
+        </div>
+
+        <!-- 날짜 선택 -->
+        <div style="display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:16px;">
+          <button style="background:none; border:none; font-size:18px; cursor:pointer;">◀</button>
+          <div style="font-size:15px; font-weight:600;">2026년 2월 6일 (목)</div>
+          <button style="background:none; border:none; font-size:18px; cursor:pointer; opacity:0.3;">▶</button>
+        </div>
+
+        <!-- 오늘 보고서 -->
+        <div class="card">
+          <div style="display:flex; gap:8px; margin-bottom:12px;">
+            <div style="padding:8px 12px; background:var(--secondary-light); border-radius:10px; text-align:center; flex:1;">
+              <div style="font-size:20px;">😊</div>
+              <div style="font-size:10px; color:var(--text-secondary); margin-top:2px;">컨디션</div>
+              <div style="font-size:12px; font-weight:600;">좋음</div>
+            </div>
+            <div style="padding:8px 12px; background:var(--primary-light); border-radius:10px; text-align:center; flex:1;">
+              <div style="font-size:20px;">🍚</div>
+              <div style="font-size:10px; color:var(--text-secondary); margin-top:2px;">식욕</div>
+              <div style="font-size:12px; font-weight:600;">보통</div>
+            </div>
+            <div style="padding:8px 12px; background:var(--secondary-light); border-radius:10px; text-align:center; flex:1;">
+              <div style="font-size:20px;">😄</div>
+              <div style="font-size:10px; color:var(--text-secondary); margin-top:2px;">기분</div>
+              <div style="font-size:12px; font-weight:600;">즐거움</div>
+            </div>
+          </div>
+
+          <div style="font-size:13px; line-height:1.7; color:var(--text); margin-bottom:12px;">
+            오늘 아침 기분 좋게 등원하셨습니다. 미술치료 시간에 수채화 그리기에 적극 참여하셨고,
+            특히 꽃 그림을 예쁘게 그리셨습니다. 점심 식사는 밥 반 정도 드셨고 반찬은 잘 드셨습니다.
+            오후 산책 시간에도 즐겁게 참여하셨습니다.
+          </div>
+
+          <div style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">오늘의 사진</div>
+          <div style="display:flex; gap:6px; overflow-x:auto;">
+            <div style="width:100px; height:100px; background:var(--primary-light); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:36px; flex-shrink:0;">🎨</div>
+            <div style="width:100px; height:100px; background:var(--secondary-light); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:36px; flex-shrink:0;">🚶</div>
+            <div style="width:100px; height:100px; background:var(--warning-light); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:36px; flex-shrink:0;">🍚</div>
+            <div style="width:100px; height:100px; background:var(--bg); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:36px; flex-shrink:0;">🎵</div>
+          </div>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:8px;">
+            작성자: 이수진 사회복지사 · 15:30
+          </div>
+        </div>
+
+        <!-- 오늘 활동 참여 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">오늘 참여 프로그램</span>
+          </div>
+          <div class="list-item">
+            <div style="width:36px; height:36px; background:#E8F8E9; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px;">🎨</div>
+            <div class="list-item-content">
+              <div class="list-item-title">미술치료</div>
+              <div class="list-item-subtitle">10:00~11:00 · 수채화 꽃 그리기</div>
+            </div>
+            <span class="badge badge-success">참여</span>
+          </div>
+          <div class="list-item">
+            <div style="width:36px; height:36px; background:#FEF3E0; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px;">🎵</div>
+            <div class="list-item-content">
+              <div class="list-item-title">음악치료</div>
+              <div class="list-item-subtitle">14:00~15:00</div>
+            </div>
+            <span class="badge badge-primary">예정</span>
+          </div>
+        </div>
+
+        <!-- 지난 보고서 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">최근 보고서</span>
+          </div>
+          <div class="list-item" style="cursor:pointer;">
+            <div style="font-size:20px;">😊</div>
+            <div class="list-item-content">
+              <div class="list-item-title">2월 5일 (수)</div>
+              <div class="list-item-subtitle">컨디션 좋음 · 인지훈련 참여</div>
+            </div>
+            <span style="color:var(--text-light);">→</span>
+          </div>
+          <div class="list-item" style="cursor:pointer;">
+            <div style="font-size:20px;">😐</div>
+            <div class="list-item-content">
+              <div class="list-item-title">2월 4일 (화)</div>
+              <div class="list-item-subtitle">컨디션 보통 · 식욕 저하</div>
+            </div>
+            <span style="color:var(--text-light);">→</span>
+          </div>
+          <div class="list-item" style="cursor:pointer;">
+            <div style="font-size:20px;">😊</div>
+            <div class="list-item-content">
+              <div class="list-item-title">2월 3일 (월)</div>
+              <div class="list-item-subtitle">컨디션 좋음 · 운동치료 참여</div>
+            </div>
+            <span style="color:var(--text-light);">→</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 채팅 화면 -->
+      <div id="screen-chat" class="screen">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <button onclick="showScreen('screen-home'); setActiveTab(document.querySelectorAll('.tab-item')[0]);" style="background:none; border:none; font-size:20px; cursor:pointer;">←</button>
+          <div class="section-title" style="margin:0;">💬 시설과 소통</div>
+        </div>
+
+        <!-- 공지사항 -->
+        <div class="card" style="background: var(--primary-light); border: 1px solid rgba(74,144,217,0.2);">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size:16px;">📢</span>
+            <div style="flex:1;">
+              <div style="font-size: 12px; font-weight: 600;">설 연휴 휴관 안내 (2/7~2/10)</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">조은아침 주간보호센터 · 2/4</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 채팅 영역 -->
+        <div class="card" style="min-height: 300px;">
+          <div style="text-align:center; font-size:11px; color:var(--text-light); margin-bottom:12px;">2026년 2월 6일</div>
+
+          <div style="display:flex; gap:8px; margin-bottom:12px;">
+            <div class="avatar-sm avatar" style="font-size:12px;">👩</div>
+            <div>
+              <div style="font-size:11px; color:var(--text-secondary); margin-bottom:2px;">이수진 사회복지사</div>
+              <div class="chat-bubble received">
+                안녕하세요, 김지영님! 어머니 오늘 아침 기분 좋게 등원하셨어요 😊
+              </div>
+              <div class="chat-time">09:15</div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; align-items:flex-end; margin-bottom:12px;">
+            <div class="chat-bubble sent">
+              감사합니다! 오늘 컨디션은 괜찮으세요?
+            </div>
+            <div class="chat-time">09:30</div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-bottom:12px;">
+            <div class="avatar-sm avatar" style="font-size:12px;">👩</div>
+            <div>
+              <div style="font-size:11px; color:var(--text-secondary); margin-bottom:2px;">이수진 사회복지사</div>
+              <div class="chat-bubble received">
+                네, 아침 식사도 잘 하셨고 미술치료도 적극적으로 참여하셨어요. 수채화로 꽃을 예쁘게 그리셨답니다 🎨
+              </div>
+              <div class="chat-time">09:32</div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; align-items:flex-end; margin-bottom:12px;">
+            <div class="chat-bubble sent">
+              다행이네요! 사진 보내주실 수 있으세요?
+            </div>
+            <div class="chat-time">09:35</div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-bottom:12px;">
+            <div class="avatar-sm avatar" style="font-size:12px;">👩</div>
+            <div>
+              <div style="font-size:11px; color:var(--text-secondary); margin-bottom:2px;">이수진 사회복지사</div>
+              <div class="chat-bubble received">
+                네! 일과 보고에 사진 올려두었어요. 확인해보세요 📋
+              </div>
+              <div class="chat-time">09:36</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 채팅 입력바 (채팅 화면에서만 보이도록) -->
+    <div class="chat-input-bar" id="chatInputBar" style="display:none;">
+      <button style="background:none; border:none; font-size:20px; cursor:pointer;">📎</button>
+      <input type="text" class="chat-input" placeholder="메시지를 입력하세요...">
+      <button class="btn btn-primary btn-sm" style="border-radius:50%; width:36px; height:36px; padding:0;">↑</button>
+    </div>
+
+    <!-- 하단 탭바 -->
+    <div class="tab-bar">
+      <button class="tab-item active" onclick="showScreen('screen-home'); setActiveTab(this);">
+        <span class="tab-icon">🏠</span>
+        <span>홈</span>
+      </button>
+      <button class="tab-item" onclick="showScreen('screen-transport'); setActiveTab(this);">
+        <span class="tab-icon">🚐</span>
+        <span>송영</span>
+      </button>
+      <button class="tab-item" onclick="showScreen('screen-medication'); setActiveTab(this);">
+        <span class="tab-icon">💊</span>
+        <span>복약</span>
+      </button>
+      <button class="tab-item" onclick="showScreen('screen-daily'); setActiveTab(this);">
+        <span class="tab-icon">📋</span>
+        <span>일과</span>
+      </button>
+      <button class="tab-item" onclick="showScreen('screen-chat'); setActiveTab(this);">
+        <span class="tab-icon notification-dot">💬</span>
+        <span>소통</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+      document.querySelector('.content').scrollTop = 0;
+
+      // 채팅 화면일 때만 입력바 표시
+      const chatBar = document.getElementById('chatInputBar');
+      chatBar.style.display = screenId === 'screen-chat' ? 'flex' : 'none';
+    }
+
+    function setActiveTab(el) {
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+  </script>
+</body>
+</html>
